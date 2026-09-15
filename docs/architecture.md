@@ -1,49 +1,141 @@
-# Architecture
+# Technical Architecture
 
-## System Architecture
+## 1. Architecture Overview
 
-[Describe the overall architecture of your system. Replace the Mermaid diagram below with your actual architecture.]
+The proposed system follows a layered architecture in which vessel and port data are processed, analysed, and converted into operational recommendations.
 
-```mermaid
-graph TD
-    A[User / Browser] -->|HTTP| B[Frontend - React]
-    B -->|REST API| C[Backend - FastAPI]
-    C -->|SDK| D[watsonx.ai]
-    C -->|Query| E[PostgreSQL]
-    C -->|Publish| F[Slack Webhook]
-    D -->|Inference Result| C
+### Planned Data Flow
+
+```text
++---------------------------+
+|      Port Supervisor      |
++-------------+-------------+
+              |
+              v
++---------------------------+
+|     Dashboard / UI        |
++-------------+-------------+
+              |
+              v
++---------------------------+
+|     Backend / API         |
++-------------+-------------+
+              |
+              v
++---------------------------+
+| Data Processing &         |
+| Congestion Prediction     |
++-------------+-------------+
+              |
+        +-----+------+
+        |            |
+        v            v
++---------------+  +-------------------+
+| Route         |  | Berth + Crane     |
+| Recommendation|  | Optimisation      |
++-------+-------+  +---------+---------+
+        |                    |
+        +---------+----------+
+                  |
+                  v
+       +---------------------+
+       | 72-Hour Plan        |
+       +----------+----------+
+                  |
+                  v
+       +---------------------+
+       | Results / Dashboard |
+       +---------------------+
 ```
 
-## Components
+**Important:** This is the planned architecture based on the roadmap. Replace the technology/component names and diagram with the actual architecture after the application is completed.
 
-| Component | Technology | Responsibility |
+## 2. Components
+
+| Component | Planned Responsibility | Final Technology |
 |---|---|---|
-| Frontend | [e.g., React 18] | [e.g., Dashboard UI, user interaction] |
-| Backend API | [e.g., FastAPI] | [e.g., Business logic, orchestration] |
-| AI / ML | [e.g., watsonx.ai] | [e.g., Anomaly scoring, classification] |
-| Database | [e.g., PostgreSQL] | [e.g., Storing pipeline events and scores] |
-| Notifications | [e.g., Slack API] | [e.g., Alerting on threshold breaches] |
+| Dashboard / Frontend | Display vessels, congestion, recommendations, resources, and 72-hour plan | **To be confirmed** |
+| Backend / API | Receive requests and connect application components | **To be confirmed** |
+| Data Processing | Prepare vessel and port data for analysis | **To be confirmed** |
+| Congestion Prediction | Predict congestion hotspots and periods | **To be confirmed** |
+| Route Recommendation | Recommend alternate routing options | **To be confirmed** |
+| Berth Optimisation | Select suitable berths | **To be confirmed** |
+| Crane Optimisation | Allocate available cranes | **To be confirmed** |
+| Operations Planner | Generate the 72-hour plan | **To be confirmed** |
+| Data Storage | Store vessel, berth, crane, schedule, prediction, and assignment data where required | **To be confirmed** |
+| IBM BoB | AI-assisted development workflow | IBM BoB |
 
-## Data Flow
+## 3. Recommended Prototype Stack
 
-[Describe how data moves through your system from input to output.]
+The roadmap recommends keeping the technology stack simple:
 
-1. [e.g., Pipeline logs are ingested via a webhook from GitHub Actions]
-2. [e.g., Logs are preprocessed and chunked into 512-token segments]
-3. [e.g., Each chunk is sent to the watsonx.ai inference endpoint]
-4. [e.g., Anomaly scores are stored in PostgreSQL]
-5. [e.g., The React dashboard polls the API every 30 seconds to refresh]
+- **Frontend:** React + TypeScript
+- **Backend:** Python + FastAPI
+- **AI/Data:** Python + Pandas + Scikit-learn
+- **Database:** PostgreSQL
 
-## Security Considerations
+SQLite is also identified as an option for a very fast prototype.
 
-[Note any security decisions relevant to the architecture — even if basic.]
+These are **recommendations from the roadmap, not confirmed implementation details**. The final architecture document must use the technologies actually present in the source code.
 
-- [e.g., API keys stored in environment variables, never committed to git]
-- [e.g., All API routes require a Bearer token]
-- [e.g., Database credentials rotated via IBM Secrets Manager]
+## 4. Data Flow
 
-## Scalability Notes
+The intended data flow is:
 
-[Optional: how would this scale beyond the hackathon prototype?]
+1. Vessel and port information enters the application.
+2. The data is processed into a usable format.
+3. Congestion prediction analyses vessel schedules and available capacity.
+4. If congestion is expected, alternate routing recommendations can be generated.
+5. Berth and crane availability are considered for resource assignment.
+6. The system creates a 72-hour operations plan.
+7. Results are displayed to the port supervisor through the dashboard.
 
-[e.g., "The FastAPI backend is stateless and could be horizontally scaled behind a load balancer. The watsonx.ai calls are the bottleneck and would benefit from request batching."]
+## 5. Data Entities
+
+The planned database/data model may include:
+
+- Vessels
+- Berths
+- Cranes
+- Schedules
+- Predictions
+- Assignments
+
+The final implementation should document the actual tables, collections, files, or other data structures used.
+
+## 6. Security Considerations
+
+The final implementation should follow basic security practices appropriate to the prototype, including:
+
+- Do not commit real credentials or secrets.
+- Store sensitive configuration in environment variables.
+- Keep `.env` out of version control.
+- Validate user-provided input.
+- Restrict database credentials and connection information.
+- Avoid exposing unnecessary internal system information through APIs.
+
+The official template also requires that `.env` and similar secrets are not committed to the repository.
+
+## 7. Scalability Considerations
+
+The solution can be extended to support:
+
+- More vessels
+- More berths and cranes
+- Larger datasets
+- Multiple ports or zones
+- More detailed routing constraints
+- Live vessel and port data
+- More advanced prediction and optimisation models
+
+The final submission should describe only scalability features that are relevant to the implemented design.
+
+## 8. Architecture Verification
+
+Before final submission, the team should verify that:
+
+- Every component shown in this document exists in the actual application.
+- The technology names match the source code.
+- The data flow matches the implemented workflow.
+- The architecture diagram matches the application.
+- IBM BoB usage is described accurately.

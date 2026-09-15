@@ -1,41 +1,193 @@
 # Solution Overview
 
-## What We Built
+## 1. Solution Summary
 
-[Describe your solution in plain language. Avoid jargon — write as if explaining to a smart colleague unfamiliar with your tech stack.]
+**PortIQ — AI-Powered Container Congestion Prediction & Port Operations Optimisation** is a proposed decision-support solution for port supervisors and operations teams.
 
-## How It Works
+The solution combines congestion prediction, alternate routing recommendations, berth and crane optimisation, and a 72-hour operations plan in a single workflow.
 
-[Explain the core mechanism step by step. A numbered list or simple flow works well here.]
+The system is designed to take vessel and port operational information, analyse current and expected resource pressure, identify possible congestion, and provide recommended operational actions.
 
-1. [Step 1: e.g., "User connects their GitHub repository via OAuth"]
-2. [Step 2: e.g., "The system ingests pipeline logs and feeds them to watsonx.ai"]
-3. [Step 3: e.g., "An anomaly score is computed and displayed on the dashboard"]
-4. [Step 4: e.g., "Alerts are sent to Slack when the score exceeds a threshold"]
+> **Implementation note:** The final project name and all implementation-specific technologies must be updated to match the team's completed application before submission.
 
-## Architecture Diagram
+## 2. How the Solution Works
 
-> See [`architecture.md`](architecture.md) for the detailed diagram.
+The planned workflow is:
 
-[Optionally include a simple ASCII or Mermaid diagram here for quick reference.]
-
+```text
+Vessel / Port Data
+       |
+       v
+Data Processing
+       |
+       v
+Congestion Prediction
+       |
+       +----------------------+
+       |                      |
+       v                      v
+Alternate Route        Berth + Crane
+Recommendation          Optimisation
+       |                      |
+       +----------+-----------+
+                  |
+                  v
+          72-Hour Operations Plan
+                  |
+                  v
+              Dashboard
 ```
-[User] → [Frontend: React] → [API: FastAPI] → [watsonx.ai] → [Dashboard]
-                                    ↓
-                             [PostgreSQL DB]
+
+The actual implementation may differ. The final diagram should reflect the completed source code.
+
+## 3. Key Features
+
+### 3.1 Port Dashboard
+
+The dashboard is intended to provide an overview of:
+
+- Number of ships
+- Current berth occupancy
+- Crane availability
+- Current congestion
+- Predicted congestion
+- Alerts
+
+This gives the operator a quick view of the current and expected port situation.
+
+### 3.2 Congestion Prediction
+
+The system uses vessel and port information such as:
+
+- Ship schedules
+- Arrival times
+- Number of containers
+- Berth capacity
+- Current ships waiting
+
+The expected output includes the congestion level, expected peak period, and affected area.
+
+Example:
+
+```text
+Congestion: HIGH
+
+Expected Peak: 2 PM – 7 PM
+Affected Area: Berth Zone B
 ```
 
-## Key Design Decisions
+The example above is illustrative and must not be presented as an actual measured result.
 
-| Decision | Rationale |
-|---|---|
-| [e.g., Used watsonx.ai for anomaly detection] | [e.g., Pre-trained models reduced time-to-value vs. building from scratch] |
-| [Decision 2] | [Rationale 2] |
-| [Decision 3] | [Rationale 3] |
+### 3.3 Alternate Route Recommendation
 
-## IBM Technologies Used
+When congestion is expected in a route or port zone, the system can compare the current option with an alternative and recommend a route expected to reduce waiting.
 
-[Explain specifically HOW you used each IBM technology — not just that you used it.]
+For example:
 
-- **[IBM Tech 1, e.g., watsonx.ai]:** [How it was used — e.g., "Used the `ibm/granite-13b-instruct-v2` model via the Python SDK to classify anomaly types from log text."]
-- **[IBM Tech 2]:** [How it was used]
+```text
+Current Route:
+Port A → Zone B
+
+Expected Waiting:
+9 hours
+
+Alternative:
+Port A → Zone C
+
+Expected Waiting:
+3 hours
+
+Saving:
+6 hours
+```
+
+The values above are examples from the planning material and are not project test results.
+
+### 3.4 Berth and Crane Optimisation
+
+The system recommends berth and crane assignments by considering operational constraints such as:
+
+- Berth availability
+- Berth capacity
+- Crane availability
+- Ship priority
+- Expected handling time
+
+Example:
+
+```text
+Ship A
+  ↓
+Berth B3
+  ↓
+Crane C5 + C6
+```
+
+The goal is to reduce vessel waiting time and use available port resources efficiently.
+
+### 3.5 72-Hour Operations Plan
+
+The solution generates a forward-looking operations schedule for shift supervisors.
+
+The planned schedule can contain:
+
+| Time | Vessel | Berth | Crane | Action |
+|---|---|---|---|---|
+| 10 AM | Ship A | B3 | C5 | Unload |
+| 12 PM | Ship B | B7 | C2 | Unload |
+| 3 PM | Ship C | B2 | C4 | Delay |
+| 6 PM | Ship D | B5 | C1 | Move |
+
+These rows are illustrative examples. The final submission must show the actual output generated by the application.
+
+## 4. Intended User Journey
+
+1. The operator opens the port dashboard.
+2. The system displays current vessel and resource information.
+3. Vessel and port data are processed.
+4. The system identifies possible congestion.
+5. The operator reviews the predicted congestion.
+6. The system provides routing and resource recommendations.
+7. The operator reviews berth and crane assignments.
+8. The system generates the 72-hour operations plan.
+9. The operator uses the recommendations for operational planning.
+
+## 5. IBM BoB Integration
+
+IBM BoB is a compulsory part of the hackathon development process. The final documentation must explain the team's actual use of IBM BoB rather than simply listing it as a technology.
+
+The completed submission should specify:
+
+- Which parts of the application were developed or assisted using IBM BoB.
+- How IBM BoB was used during development.
+- Which development tasks were performed using Ask, Plan, or Agent mode, if applicable.
+- Any code generation, review, debugging, or planning activities performed with IBM BoB.
+
+**Do not claim a specific IBM service or AI model unless it was actually used in the final application.**
+
+## 6. Design Decisions
+
+The prototype is intended to keep the workflow focused on the main L1 requirements instead of introducing unnecessary technologies.
+
+The core design focuses on:
+
+- Predicting congestion before it becomes a major operational problem.
+- Turning predictions into practical recommendations.
+- Considering berth and crane constraints together.
+- Producing a usable 72-hour plan.
+- Presenting the information through a single operational interface.
+
+## 7. Limitations
+
+The prototype may use simulated data because real port operational data may not be available.
+
+The final documentation should state any additional limitations discovered during implementation, such as:
+
+- Dataset size
+- Prediction accuracy
+- Simplified routing model
+- Simplified port/resource constraints
+- Lack of live port data
+- Deployment limitations
+
+Only limitations that actually apply to the final system should remain in the final version.
